@@ -1,0 +1,63 @@
+---
+---
+<section class="share">
+  <button class="share-btn kakao" id="share-kakao">
+    <span class="icon">💬</span> KakaoTalk Share
+  </button>
+  <button class="share-btn link" id="share-link">
+    <span class="icon">🔗</span> Copy Link
+  </button>
+</section>
+
+<script>
+  document.getElementById('share-link')?.addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      alert('링크가 복사되었습니다.');
+    } catch (err) {
+      console.error('Failed to copy link: ', err);
+    }
+  });
+  
+  document.getElementById('share-kakao')?.addEventListener('click', () => {
+    alert('카카오톡 공유 기능은 API 키 설정이 필요합니다.');
+  });
+</script>
+
+<style>
+  .share {
+    padding: 40px 20px;
+    background: #fcfcfc;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+  .share-btn {
+    flex: 1;
+    max-width: 200px;
+    padding: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: opacity 0.2s;
+  }
+  .share-btn:hover {
+    opacity: 0.9;
+  }
+  .kakao {
+    background: #FEE500;
+    color: #000000;
+  }
+  .link {
+    background: #eee;
+    color: #333;
+  }
+  .icon {
+    font-size: 1.1rem;
+  }
+</style>

@@ -1,0 +1,78 @@
+---
+import 'photoswipe/style.css';
+
+const images = [
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 1' },
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 2' },
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 3' },
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 4' },
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 5' },
+  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 6' },
+];
+---
+
+<div class="gallery_container">
+  <p class="title">Gallery</p>
+  <div class="gallery_grid" id="gallery-grid">
+    {
+      images.map((image) => (
+        <a
+          href={image.src}
+          data-pswp-width={image.width}
+          data-pswp-height={image.height}
+          class="gallery_item"
+          target="_blank"
+        >
+          <img src={image.src} alt={image.alt} />
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  import PhotoSwipeLightbox from "photoswipe/lightbox";
+
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#gallery-grid",
+    children: "a",
+    pswpModule: () => import("photoswipe"),
+  });
+  lightbox.init();
+</script>
+
+<style>
+  .gallery_container {
+    padding: 60px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #fff;
+  }
+  .title {
+    color: #d4a373;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    font-family: 'Crimson Text', serif;
+    text-transform: uppercase;
+  }
+  .gallery_grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 8px;
+    width: 100%;
+  }
+  .gallery_item {
+    border-radius: 4px;
+    overflow: hidden;
+    display: block;
+  }
+  .gallery_item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    aspect-ratio: 1 / 1;
+  }
+</style>

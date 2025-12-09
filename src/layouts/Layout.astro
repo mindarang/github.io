@@ -1,0 +1,72 @@
+---
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="ko">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content="Wedding Invitation" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+	</head>
+	<body>
+		<slot />
+	</body>
+</html>
+<style is:global>
+	:root {
+		--text-main: #333333;
+		--text-sub: #666666;
+		--bg-color: #ffffff;
+		--accent-color: #e0e0e0;
+	}
+	html {
+		font-family: 'Noto Sans KR', sans-serif;
+		background: #f0f0f0;
+		color: var(--text-main);
+	}
+	body {
+		margin: 0;
+		padding: 0;
+		max-width: 480px; /* Mobile width simulation */
+		margin: 0 auto;
+		background: #ffffff;
+		min-height: 100vh;
+		box-shadow: 0 0 20px rgba(0,0,0,0.05);
+	}
+	h1, h2, h3, h4, h5, h6 {
+		margin: 0;
+		font-weight: normal;
+	}
+	p {
+		margin: 0;
+		line-height: 1.6;
+	}
+	ul, ol {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+	img {
+		max-width: 100%;
+		display: block;
+	}
+	section {
+		padding: 60px 20px;
+		text-align: center;
+	}
+	.serif {
+		font-family: 'Crimson Text', serif;
+	}
+</style>

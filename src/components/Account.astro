@@ -1,0 +1,173 @@
+---
+---
+<section class="account">
+  <div class="title serif">ACCOUNT</div>
+  <div class="sub-title">마음 전하실 곳</div>
+
+  <div class="accordion-group">
+    <div class="accordion-item">
+      <button class="accordion-header">
+        <span>신랑측 계좌번호</span>
+        <span class="icon">▼</span>
+      </button>
+      <div class="accordion-content">
+        <div class="account-row">
+          <div class="info">
+            <span class="bank">Bank Name</span>
+            <span class="number">123-456-789012</span>
+            <span class="owner">Name</span>
+          </div>
+          <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+        <div class="account-row">
+            <div class="info">
+              <span class="bank">Bank Name</span>
+              <span class="number">123-456-789012</span>
+              <span class="owner">Father Name</span>
+            </div>
+            <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <button class="accordion-header">
+        <span>신부측 계좌번호</span>
+        <span class="icon">▼</span>
+      </button>
+      <div class="accordion-content">
+        <div class="account-row">
+            <div class="info">
+              <span class="bank">Bank Name</span>
+              <span class="number">123-456-789012</span>
+              <span class="owner">Name</span>
+            </div>
+            <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+        <div class="account-row">
+            <div class="info">
+              <span class="bank">Bank Name</span>
+              <span class="number">123-456-789012</span>
+              <span class="owner">Father Name</span>
+            </div>
+            <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Accordion Logic
+  const accordions = document.querySelectorAll('.accordion-header');
+  accordions.forEach(acc => {
+    acc.addEventListener('click', function() {
+      this.classList.toggle('active');
+      const content = this.nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  });
+
+  // Copy Logic
+  const copyBtns = document.querySelectorAll('.copy-btn');
+  copyBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const text = btn.getAttribute('data-clipboard-text');
+      try {
+        await navigator.clipboard.writeText(text);
+        alert('계좌번호가 복사되었습니다.');
+      } catch (err) {
+        console.error('Failed to copy: ', err);
+      }
+    });
+  });
+</script>
+
+<style>
+  .title {
+    color: #d4a373;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+  .sub-title {
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 40px;
+  }
+  .accordion-group {
+    padding: 0 20px;
+  }
+  .accordion-item {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .accordion-header {
+    width: 100%;
+    padding: 15px 20px;
+    background: #f9f9f9;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #333;
+  }
+  .accordion-header .icon {
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+  }
+  .accordion-header.active .icon {
+    transform: rotate(180deg);
+  }
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+    background: #fff;
+  }
+  .account-row {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f5f5f5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+  .account-row:last-child {
+    border-bottom: none;
+  }
+  .info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .bank {
+    font-size: 0.8rem;
+    color: #888;
+  }
+  .number {
+    font-size: 0.95rem;
+    color: #333;
+  }
+  .owner {
+    font-size: 0.85rem;
+    color: #666;
+  }
+  .copy-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    color: #555;
+    cursor: pointer;
+  }
+</style>
