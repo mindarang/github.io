@@ -1,33 +1,58 @@
 ---
 import 'photoswipe/style.css';
+import { Image } from 'astro:assets';
 
-const images = [
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 1' },
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 2' },
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 3' },
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 4' },
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 5' },
-  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 6' },
-];
+const imageFiles = import.meta.glob('../assets/gallery/*.{jpeg,jpg,png,gif,JPG,JPEG,PNG,GIF}', { eager: true });
+const images = Object.keys(imageFiles)
+  .sort((a, b) => {
+    const getNum = (str: string) => parseInt(str.match(/gallery_(\d+)/)?.[1] || "0", 10);
+    return getNum(a) - getNum(b);
+  })
+  .map((path: string) => (imageFiles as any)[path].default);
+
+const INITIAL_DISPLAY_COUNT = 9;
 ---
 
 <section class="gallery_container">
   <div class="title">GALLERY</div>
   <div class="gallery_grid" id="gallery-grid">
     {
-      images.map((image) => (
+      images.map((image, index) => (
         <a
           href={image.src}
           data-pswp-width={image.width}
           data-pswp-height={image.height}
-          class="gallery_item"
+          class={`gallery_item ${index >= INITIAL_DISPLAY_COUNT ? 'hidden' : ''}`}
           target="_blank"
         >
-          <img src={image.src} alt={image.alt} />
+          <Image 
+            src={image} 
+            alt={`Gallery ${index + 1}`} 
+            width={400} 
+            densities={[1.5, 2]}
+            quality="mid"
+          />
         </a>
       ))
     }
   </div>
+  
+  {images.length > INITIAL_DISPLAY_COUNT && (
+    <div class="more-btn-container">
+      <button id="show-more-btn" class="show-more-btn">
+        더보기
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <path d="M7 10L12 15L17 10" stroke="#9B785C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button id="collapse-btn" class="show-more-btn" style="display: none;">
+        접기
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+           <path d="M7 15L12 10L17 15" stroke="#9B785C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  )}
 </section>
 
 <script>
@@ -39,6 +64,36 @@ const images = [
     pswpModule: () => import("photoswipe"),
   });
   lightbox.init();
+
+  // Toggle Functionality
+  const showMoreBtn = document.getElementById('show-more-btn');
+  const collapseBtn = document.getElementById('collapse-btn');
+  const galleryGrid = document.getElementById('gallery-grid');
+  
+  if (showMoreBtn && collapseBtn && galleryGrid) {
+    const items = galleryGrid.querySelectorAll('.gallery_item');
+    const INITIAL_COUNT = 9;
+
+    showMoreBtn.addEventListener('click', () => {
+      items.forEach(item => item.classList.remove('hidden'));
+      showMoreBtn.style.display = 'none';
+      collapseBtn.style.display = 'flex';
+    });
+
+    collapseBtn.addEventListener('click', () => {
+      items.forEach((item, index) => {
+        if (index >= INITIAL_COUNT) {
+          item.classList.add('hidden');
+        }
+      });
+      collapseBtn.style.display = 'none';
+      showMoreBtn.style.display = 'flex';
+      
+      // Optional: Scroll back to the button area or top of gallery if user is far down
+      const galleryTop = galleryGrid.offsetTop;
+      window.scrollTo({ top: galleryTop - 100, behavior: 'smooth' });
+    });
+  }
 </script>
 
 <style>
@@ -68,6 +123,10 @@ const images = [
     overflow: hidden;
     display: block;
   }
+
+  .gallery_item.hidden {
+    display: none;
+  }
   
   .gallery_item img {
     width: 100%;
@@ -80,5 +139,29 @@ const images = [
   
   .gallery_item:hover img {
     transform: scale(1.05);
+  }
+
+  .more-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+
+  .show-more-btn {
+    background: #FAFAFA;
+    border: 1px solid #E0E0E0;
+    color: #333;
+    padding: 10px 40px;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all 0.2s ease;
+  }
+
+  .show-more-btn:hover {
+    background: #F0F0F0;
   }
 </style>

@@ -1,8 +1,10 @@
 ---
+import { Image } from 'astro:assets';
+import mainImage from '../assets/main.jpeg';
 ---
 <section class="intro">
   <div class="main-image">
-    <img src="https://placehold.co/800x1010/F5F0EB/9B785C" alt="Main Wedding Photo" />
+    <Image src={mainImage} alt="Main Wedding Photo" class="main-photo" width={800} loading="eager" />
     <div class="overlay-content">
       <div class="names-container">
         <span class="groom-name">김민섭</span>

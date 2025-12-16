@@ -1,22 +1,105 @@
 ---
+import { Image } from 'astro:assets';
+import mapImage from '../assets/map.jpg';
 ---
 <section class="location">
   <div class="title">LOCATION</div>
   <div class="map-container">
-    <img src="https://placehold.co/800x400/E8E4DF/9B785C?text=Map" alt="Map" />
+    <Image src={mapImage} alt="Map" />
   </div>
   <div class="info">
-    <h3>더컨벤션</h3>
-    <p class="address">서울시 강남구 테헤란로 123</p>
-    <p class="floor">3층 그랜드볼룸</p>
-    <p class="phone">Tel. 02-1234-5678</p>
+    <h3>미추홀타워 본관(A동) 21층</h3>
+    <div class="address-row">
+      <p class="address">인천 연수구 갯벌로 12</p>
+      <button id="copy-btn" class="copy-btn" aria-label="주소 복사">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        복사
+      </button>
+    </div>
+    <p class="floor">미추홀타워 본관(A동) 21층</p>
   </div>
   <div class="map-buttons">
     <a href="#" class="map-btn">네이버 지도</a>
     <a href="#" class="map-btn">카카오맵</a>
-    <a href="#" class="map-btn">구글 지도</a>
+    <a href="#" class="map-btn">티맵</a>
+  </div>
+
+  <div class="transport-details">
+    <div class="transport-item">
+      <div class="header">
+        <span class="icon">🚇</span>
+        <h3>지하철 이용 시</h3>
+      </div>
+      <div class="content">
+        <p class="subway-info">
+          <span class="badge line-1">1호선</span>
+          테크노파크역 4번 출구에서 387m, 도보 3분
+        </p>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="header">
+        <span class="icon">🚌</span>
+        <h3>버스 이용 시</h3>
+      </div>
+      <div class="content">
+        <p class="sub-title">테크노파크역에서 하차</p>
+        <div class="bus-grid">
+          <div class="bus-row">
+            <span class="badge blue">간선버스</span>
+            <span class="bus-numbers">4, 9, 16-1, 81</span>
+          </div>
+          <div class="bus-row">
+            <span class="badge purple">급행버스</span>
+            <span class="bus-numbers">급행91, 급행99</span>
+          </div>
+          <div class="bus-row">
+            <span class="badge green">지선버스</span>
+            <span class="bus-numbers">순환43</span>
+          </div>
+          <div class="bus-row">
+            <span class="badge dark-blue">좌석버스</span>
+            <span class="bus-numbers">303-1, 320</span>
+          </div>
+          <div class="bus-row">
+            <span class="badge red">광역버스</span>
+            <span class="bus-numbers">M6450</span>
+          </div>
+          <div class="bus-row">
+            <span class="badge sky">공항버스</span>
+            <span class="bus-numbers">6777-1</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="transport-item">
+      <div class="header">
+        <span class="icon">🚗</span>
+        <h3>자차 이용 시</h3>
+      </div>
+      <div class="content">
+        <ul class="car-info">
+          <li>주차장 : 500대 100% 수용 가능한 주차시설 완비</li>
+          <li>도로명 : 인천 연수구 갯벌로 12 미추홀타워 본관(A동) 21층</li>
+          <li>지 번 : 송도동 7-50</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  const copyBtn = document.getElementById('copy-btn');
+  if (copyBtn) {
+    copyBtn.addEventListener('click', () => {
+      navigator.clipboard.writeText('인천 연수구 갯벌로 12').then(() => {
+        alert('주소가 복사되었습니다.');
+      });
+    });
+  }
+</script>
 
 <style>
   .location {
@@ -35,11 +118,14 @@
   
   .map-container {
     margin-bottom: 30px;
+    padding: 0 20px;
   }
   
   .map-container img {
     width: 100%;
+    height: auto;
     display: block;
+    border-radius: 4px;
   }
   
   .info {
@@ -49,17 +135,25 @@
   
   .info h3 {
     font-family: 'Nanum Myeongjo', serif;
-    font-size: 1.3rem;
+    font-size: 1.15rem; /* Reduced from 1.3rem */
     font-weight: 600;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     color: #333;
+  }
+
+  .address-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 6px;
   }
   
   .info p {
     font-family: 'Nanum Myeongjo', serif;
     color: #666;
-    font-size: 0.95rem;
-    margin-bottom: 8px;
+    font-size: 0.9rem; /* Reduced from 0.95rem */
+    margin-bottom: 0;
     line-height: 1.6;
   }
   
@@ -67,30 +161,202 @@
     color: #333;
     font-weight: 500;
   }
+
+  .copy-btn {
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    transition: background 0.2s;
+  }
+
+  .copy-btn:hover {
+    background: #e0e0e0;
+  }
   
   .map-buttons {
     display: flex;
     gap: 10px;
     justify-content: center;
     padding: 0 20px;
+    margin-bottom: 50px;
   }
   
   .map-btn {
     flex: 1;
     max-width: 120px;
-    padding: 12px 20px;
+    padding: 10px 0;
     background: #fff;
     border: 1px solid #ddd;
     border-radius: 6px;
     text-decoration: none;
     color: #666;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: all 0.2s;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .map-btn:hover {
     background: #f5f5f5;
     border-color: #9B785C;
     color: #9B785C;
+  }
+
+  /* Transport Details Styles */
+  .transport-details {
+    padding: 0 20px;
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .transport-item {
+    margin-bottom: 30px; /* Reduced space */
+  }
+  
+  .transport-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .icon {
+    background: #f5f5f5;
+    width: 32px; /* Smaller icon */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 1.1rem;
+  }
+  
+  .transport-details h3 {
+    color: #333;
+    font-size: 1rem; /* Reduced from 1.1rem */
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Nanum Myeongjo', serif;
+  }
+  
+  .subway-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+    flex-wrap: wrap;
+    line-height: 1.5;
+  }
+
+  .sub-title {
+    color: #666;
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+    margin-bottom: 10px;
+  }
+
+  .bus-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 15px;
+  }
+  
+  @media (max-width: 480px) {
+    .bus-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .bus-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem; /* Reduced from 0.8rem */
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid;
+    min-width: 55px;
+    text-align: center;
+  }
+
+  .badge.line-1 {
+    color: #0052A4;
+    border-color: #0052A4;
+    background: #fff;
+  }
+
+  .badge.blue {
+    color: #35b3e9;
+    border-color: #35b3e9;
+  }
+
+  .badge.purple {
+    color: #a448c7;
+    border-color: #a448c7;
+  }
+
+  .badge.green {
+    color: #3cb44a;
+    border-color: #3cb44a;
+  }
+
+  .badge.dark-blue {
+    color: #2c4a96;
+    border-color: #2c4a96;
+  }
+
+  .badge.red {
+    color: #e62e2e;
+    border-color: #e62e2e;
+  }
+
+  .badge.sky {
+    color: #4dacdc;
+    border-color: #4dacdc;
+  }
+
+  .bus-numbers {
+    color: #666;
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+  }
+
+  .car-info {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .car-info li {
+    position: relative;
+    padding-left: 10px;
+    color: #666;
+    font-size: 0.85rem; /* Reduced from 0.95rem */
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+
+  .car-info li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #999;
   }
 </style>
