@@ -2,25 +2,21 @@
 import Layout from '../layouts/Layout.astro';
 import Intro from '../components/Intro.astro';
 import Greeting from '../components/Greeting.astro';
-import Calendar from '../components/Calendar.astro';
 import Gallery from '../components/Gallery.astro';
 import Location from '../components/Location.astro';
-import Transport from '../components/Transport.astro';
+import Contact from '../components/Contact.astro';
 import Account from '../components/Account.astro';
-import Share from '../components/Share.astro';
 import Footer from '../components/Footer.astro';
 ---
 
-<Layout title="Seo Gyeongwon & Lee Eunsu Wedding">
+<Layout title="김민섭 ♥ 이다강 결혼합니다">
 	<main>
 		<Intro />
 		<Greeting />
-		<Calendar />
 		<Gallery />
 		<Location />
-		<Transport />
+		<Contact />
 		<Account />
-		<Share />
 		<Footer />
 	</main>
 </Layout>
@@ -28,5 +24,8 @@ import Footer from '../components/Footer.astro';
 <style>
 	main {
 		width: 100%;
+		max-width: 800px;
+		margin: 0 auto;
+		background: #fff;
 	}
 </style>

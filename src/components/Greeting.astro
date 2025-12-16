@@ -1,46 +1,85 @@
 ---
 ---
 <section class="greeting">
-  <div class="title serif">INVITATION</div>
+  <div class="title">INVITATION</div>
   <div class="message">
-    <p>We are getting married.</p>
-    <p>Please come and bless our beginning.</p>
+    <p>
+      평생 서로 사랑하며<br/>
+      존중하고 이해하며<br/>
+      행복한 가정을 이루고자 합니다.
+    </p>
     <br/>
-    <p>We will live happily.</p>
+    <p>
+      오셔서 저희 두 사람의<br/>
+      앞날을 축복해 주시면<br/>
+      더없는 기쁨으로 간직하겠습니다.
+    </p>
   </div>
   <div class="parents">
-    <div class="row">
-      <span>Father Name</span> · <span>Mother Name</span> <span class="relation">of</span> Groom
+    <div class="parent-line">
+      <span class="parent-name">김철수</span> · <span class="parent-name">이영희</span>
+      <span class="relation">의 장남</span>
+      <span class="child-name">민섭</span>
     </div>
-    <div class="row">
-      <span>Father Name</span> · <span>Mother Name</span> <span class="relation">of</span> Bride
+    <div class="parent-line">
+      <span class="parent-name">박영수</span> · <span class="parent-name">최미경</span>
+      <span class="relation">의 장녀</span>
+      <span class="child-name">다강</span>
     </div>
   </div>
 </section>
 
 <style>
+  .greeting {
+    padding: 60px 20px;
+    text-align: center;
+    background: #fff;
+  }
+  
   .title {
-    color: #d4a373; /* Gold-ish accent */
-    font-size: 1rem;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
-  }
-  .message {
-    font-size: 0.95rem;
-    line-height: 2;
-    color: #444;
+    color: #9B785C;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
     margin-bottom: 40px;
+    font-family: 'Crimson Text', serif;
   }
+  
+  .message {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1.05rem;
+    line-height: 2.3;
+    color: #333;
+    margin-bottom: 60px;
+    padding: 0 20px;
+  }
+  
+  .message p {
+    margin: 0;
+  }
+  
   .parents {
-    font-size: 0.9rem;
-    color: #555;
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1rem;
+    color: #333;
+    line-height: 2;
   }
-  .row {
-    margin-bottom: 10px;
+  
+  .parent-line {
+    margin-bottom: 12px;
   }
+  
+  .parent-name {
+    font-weight: 500;
+  }
+  
   .relation {
-    color: #999;
-    font-size: 0.8rem;
+    color: #666;
+    font-size: 0.95rem;
     margin: 0 5px;
   }
-</style>
+  
+  .child-name {
+    font-weight: 600;
+    margin-left: 5px;
+  }
+

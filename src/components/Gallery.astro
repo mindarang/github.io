@@ -2,17 +2,17 @@
 import 'photoswipe/style.css';
 
 const images = [
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 1' },
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 2' },
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 3' },
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 4' },
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 5' },
-  { src: 'https://placehold.co/600x400/EEE/31343C', width: 600, height: 400, alt: 'Gallery 6' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 1' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 2' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 3' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 4' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 5' },
+  { src: 'https://placehold.co/600x400/F5F0EB/9B785C', width: 600, height: 400, alt: 'Gallery 6' },
 ];
 ---
 
-<div class="gallery_container">
-  <p class="title">Gallery</p>
+<section class="gallery_container">
+  <div class="title">GALLERY</div>
   <div class="gallery_grid" id="gallery-grid">
     {
       images.map((image) => (
@@ -28,7 +28,7 @@ const images = [
       ))
     }
   </div>
-</div>
+</section>
 
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
@@ -43,36 +43,42 @@ const images = [
 
 <style>
   .gallery_container {
-    padding: 60px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    padding: 60px 0;
     background-color: #fff;
   }
+  
   .title {
-    color: #d4a373;
-    font-size: 1rem;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
+    color: #9B785C;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
+    margin-bottom: 40px;
     font-family: 'Crimson Text', serif;
-    text-transform: uppercase;
+    text-align: center;
   }
+  
   .gallery_grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 8px;
+    grid-gap: 4px;
     width: 100%;
+    padding: 0;
   }
+  
   .gallery_item {
-    border-radius: 4px;
     overflow: hidden;
     display: block;
   }
+  
   .gallery_item img {
     width: 100%;
     height: auto;
     object-fit: cover;
     display: block;
     aspect-ratio: 1 / 1;
+    transition: transform 0.3s ease;
+  }
+  
+  .gallery_item:hover img {
+    transform: scale(1.05);
   }
 </style>

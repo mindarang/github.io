@@ -1,7 +1,7 @@
 ---
 ---
 <section class="account">
-  <div class="title serif">ACCOUNT</div>
+  <div class="title">ACCOUNT</div>
   <div class="sub-title">마음 전하실 곳</div>
 
   <div class="accordion-group">
@@ -13,17 +13,25 @@
       <div class="accordion-content">
         <div class="account-row">
           <div class="info">
-            <span class="bank">Bank Name</span>
+            <span class="bank">국민은행</span>
             <span class="number">123-456-789012</span>
-            <span class="owner">Name</span>
+            <span class="owner">김민섭</span>
           </div>
           <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
         </div>
         <div class="account-row">
             <div class="info">
-              <span class="bank">Bank Name</span>
+              <span class="bank">신한은행</span>
               <span class="number">123-456-789012</span>
-              <span class="owner">Father Name</span>
+              <span class="owner">김철수 (父)</span>
+            </div>
+            <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+        <div class="account-row">
+            <div class="info">
+              <span class="bank">우리은행</span>
+              <span class="number">123-456-789012</span>
+              <span class="owner">이영희 (母)</span>
             </div>
             <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
         </div>
@@ -38,17 +46,25 @@
       <div class="accordion-content">
         <div class="account-row">
             <div class="info">
-              <span class="bank">Bank Name</span>
+              <span class="bank">카카오뱅크</span>
               <span class="number">123-456-789012</span>
-              <span class="owner">Name</span>
+              <span class="owner">이다강</span>
             </div>
             <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
         </div>
         <div class="account-row">
             <div class="info">
-              <span class="bank">Bank Name</span>
+              <span class="bank">하나은행</span>
               <span class="number">123-456-789012</span>
-              <span class="owner">Father Name</span>
+              <span class="owner">박영수 (父)</span>
+            </div>
+            <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
+        </div>
+        <div class="account-row">
+            <div class="info">
+              <span class="bank">농협은행</span>
+              <span class="number">123-456-789012</span>
+              <span class="owner">최미경 (母)</span>
             </div>
             <button class="copy-btn" data-clipboard-text="123-456-789012">복사</button>
         </div>
@@ -58,116 +74,206 @@
 </section>
 
 <script>
+  // Toast notification function
+  function showToast(message: string) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.classList.add('show');
+    }, 10);
+    
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, 2000);
+  }
+
   // Accordion Logic
-  const accordions = document.querySelectorAll('.accordion-header');
+  const accordions = document.querySelectorAll<HTMLButtonElement>('.accordion-header');
   accordions.forEach(acc => {
-    acc.addEventListener('click', function() {
+    acc.addEventListener('click', function(this: HTMLButtonElement) {
       this.classList.toggle('active');
-      const content = this.nextElementSibling;
-      if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-      } else {
-        content.style.maxHeight = content.scrollHeight + "px";
+      const content = this.nextElementSibling as HTMLElement | null;
+      if (content) {
+        if (content.style.maxHeight) {
+          content.style.maxHeight = '';
+        } else {
+          content.style.maxHeight = content.scrollHeight + "px";
+        }
       }
     });
   });
 
   // Copy Logic
-  const copyBtns = document.querySelectorAll('.copy-btn');
+  const copyBtns = document.querySelectorAll<HTMLButtonElement>('.copy-btn');
   copyBtns.forEach(btn => {
     btn.addEventListener('click', async () => {
       const text = btn.getAttribute('data-clipboard-text');
+      if (!text) return;
+      
       try {
         await navigator.clipboard.writeText(text);
-        alert('계좌번호가 복사되었습니다.');
+        showToast('계좌번호가 복사되었습니다.');
       } catch (err) {
         console.error('Failed to copy: ', err);
+        showToast('복사에 실패했습니다.');
       }
     });
   });
 </script>
 
 <style>
+  .account {
+    padding: 60px 0;
+    background: #fff;
+  }
+  
   .title {
-    color: #d4a373;
-    font-size: 1rem;
-    letter-spacing: 2px;
+    color: #9B785C;
+    font-size: 0.85rem;
+    letter-spacing: 3px;
     margin-bottom: 10px;
+    font-family: 'Crimson Text', serif;
+    text-align: center;
   }
+  
   .sub-title {
+    font-family: 'Nanum Myeongjo', serif;
     font-size: 0.9rem;
-    color: #999;
+    color: #666;
     margin-bottom: 40px;
+    text-align: center;
   }
+  
   .accordion-group {
     padding: 0 20px;
   }
+  
   .accordion-item {
-    border: 1px solid #eee;
+    border: 1px solid #e0e0e0;
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     overflow: hidden;
+    background: #fff;
   }
+  
   .accordion-header {
     width: 100%;
-    padding: 15px 20px;
-    background: #f9f9f9;
+    padding: 18px 20px;
+    background: #fafafa;
     border: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    font-family: 'Nanum Myeongjo', serif;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     color: #333;
+    transition: background 0.2s;
   }
+  
+  .accordion-header:hover {
+    background: #f5f5f5;
+  }
+  
   .accordion-header .icon {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     transition: transform 0.3s;
+    color: #999;
   }
+  
   .accordion-header.active .icon {
     transform: rotate(180deg);
   }
+  
   .accordion-content {
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-out;
     background: #fff;
   }
+  
   .account-row {
-    padding: 15px 20px;
-    border-bottom: 1px solid #f5f5f5;
+    padding: 16px 20px;
+    border-top: 1px solid #f5f5f5;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: left;
   }
-  .account-row:last-child {
-    border-bottom: none;
+  
+  .account-row:first-child {
+    border-top: none;
   }
+  
   .info {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
   }
+  
   .bank {
-    font-size: 0.8rem;
-    color: #888;
-  }
-  .number {
-    font-size: 0.95rem;
-    color: #333;
-  }
-  .owner {
+    font-family: 'Nanum Myeongjo', serif;
     font-size: 0.85rem;
+    color: #9B785C;
+    font-weight: 500;
+  }
+  
+  .number {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+  }
+  
+  .owner {
+    font-family: 'Nanum Myeongjo', serif;
+    font-size: 0.9rem;
     color: #666;
   }
+  
   .copy-btn {
-    background: #f0f0f0;
+    background: #9B785C;
     border: none;
-    padding: 5px 10px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-    color: #555;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #fff;
     cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .copy-btn:hover {
+    background: #7d6249;
+  }
+  
+  /* Toast notification styles */
+  :global(.toast) {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Nanum Myeongjo', serif;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+  }
+  
+  :global(.toast.show) {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
   }
 </style>
