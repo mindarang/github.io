@@ -1,14 +1,15 @@
 ---
-import 'photoswipe/style.css';
-import { Image } from 'astro:assets';
+import "photoswipe/style.css";
+import { Image, getImage } from "astro:assets";
 
-const imageFiles = import.meta.glob('../assets/gallery/*.{jpeg,jpg,png,gif,JPG,JPEG,PNG,GIF}', { eager: true });
-const images = Object.keys(imageFiles)
-  .sort((a, b) => {
-    const getNum = (str: string) => parseInt(str.match(/gallery_(\d+)/)?.[1] || "0", 10);
-    return getNum(a) - getNum(b);
-  })
-  .map((path: string) => (imageFiles as any)[path].default);
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/gallery/*.{jpeg,jpg,png,gif,JPG,JPEG,PNG,GIF}"
+);
+const imagePaths = Object.keys(imageFiles).sort((a, b) => {
+  const getNum = (str: string) =>
+    parseInt(str.match(/gallery_(\d+)/)?.[1] || "0", 10);
+  return getNum(a) - getNum(b);
+});
 
 const INITIAL_DISPLAY_COUNT = 9;
 ---
@@ -17,85 +18,112 @@ const INITIAL_DISPLAY_COUNT = 9;
   <div class="title">GALLERY</div>
   <div class="gallery_grid" id="gallery-grid">
     {
-      images.map((image, index) => (
-        <a
-          href={image.src}
-          data-pswp-width={image.width}
-          data-pswp-height={image.height}
-          class={`gallery_item ${index >= INITIAL_DISPLAY_COUNT ? 'hidden' : ''}`}
-          target="_blank"
-        >
-          <Image 
-            src={image} 
-            alt={`Gallery ${index + 1}`} 
-            width={400} 
-            densities={[1.5, 2]}
-            quality="mid"
-          />
-        </a>
-      ))
+      imagePaths.map(async (imagePath, index) => {
+        const imageMod = await imageFiles[imagePath]();
+        const image = imageMod.default;
+        const optimizedImage = await getImage({ src: image });
+
+        return (
+          <a
+            href={optimizedImage.src}
+            data-pswp-width={optimizedImage.attributes.width}
+            data-pswp-height={optimizedImage.attributes.height}
+            class={`gallery_item ${index >= INITIAL_DISPLAY_COUNT ? "hidden" : ""}`}
+            target="_blank"
+          >
+            <Image
+              src={image}
+              alt={`Gallery ${index + 1}`}
+              width={400}
+              densities={[1.5, 2]}
+              quality="mid"
+            />
+          </a>
+        );
+      })
     }
   </div>
-  
-  {images.length > INITIAL_DISPLAY_COUNT && (
-    <div class="more-btn-container">
-      <button id="show-more-btn" class="show-more-btn">
-        더보기
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-           <path d="M7 10L12 15L17 10" stroke="#9B785C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-      <button id="collapse-btn" class="show-more-btn" style="display: none;">
-        접기
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-           <path d="M7 15L12 10L17 15" stroke="#9B785C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </div>
-  )}
+
+  {
+    imagePaths.length > INITIAL_DISPLAY_COUNT && (
+      <div class="more-btn-container">
+        <button id="show-more-btn" class="show-more-btn">
+          더보기
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 10L12 15L17 10"
+              stroke="#9B785C"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+        <button id="collapse-btn" class="show-more-btn" style="display: none;">
+          접기
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M7 15L12 10L17 15"
+              stroke="#9B785C"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    )
+  }
 </section>
 
 <script>
   import PhotoSwipeLightbox from "photoswipe/lightbox";
-  import PhotoSwipe from "photoswipe";
 
-  const galleryGrid = document.getElementById('gallery-grid');
-  
-  if (galleryGrid) {
-      const lightbox = new PhotoSwipeLightbox({
-        gallery: "#gallery-grid",
-        children: "a",
-        pswpModule: PhotoSwipe,
-      });
-      lightbox.init();
-  }
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: "#gallery-grid",
+    children: "a",
+    pswpModule: () => import("photoswipe"),
+  });
+  lightbox.init();
 
   // Toggle Functionality
-  const showMoreBtn = document.getElementById('show-more-btn');
-  const collapseBtn = document.getElementById('collapse-btn');
-  
+  const showMoreBtn = document.getElementById("show-more-btn");
+  const collapseBtn = document.getElementById("collapse-btn");
+  const galleryGrid = document.getElementById("gallery-grid");
+
   if (showMoreBtn && collapseBtn && galleryGrid) {
-    const items = galleryGrid.querySelectorAll('.gallery_item');
+    const items = galleryGrid.querySelectorAll(".gallery_item");
     const INITIAL_COUNT = 9;
 
-    showMoreBtn.addEventListener('click', () => {
-      items.forEach(item => item.classList.remove('hidden'));
-      showMoreBtn.style.display = 'none';
-      collapseBtn.style.display = 'flex';
+    showMoreBtn.addEventListener("click", () => {
+      items.forEach((item) => item.classList.remove("hidden"));
+      showMoreBtn.style.display = "none";
+      collapseBtn.style.display = "flex";
     });
 
-    collapseBtn.addEventListener('click', () => {
+    collapseBtn.addEventListener("click", () => {
       items.forEach((item, index) => {
         if (index >= INITIAL_COUNT) {
-          item.classList.add('hidden');
+          item.classList.add("hidden");
         }
       });
-      collapseBtn.style.display = 'none';
-      showMoreBtn.style.display = 'flex';
-      
-      // Optional: Scroll back to the button area or top of gallery if user is far down
+      collapseBtn.style.display = "none";
+      showMoreBtn.style.display = "flex";
+
       const galleryTop = galleryGrid.offsetTop;
-      window.scrollTo({ top: galleryTop - 100, behavior: 'smooth' });
+      window.scrollTo({ top: galleryTop - 100, behavior: "smooth" });
     });
   }
 </script>
@@ -105,16 +133,16 @@ const INITIAL_DISPLAY_COUNT = 9;
     padding: 60px 0;
     background-color: #fff;
   }
-  
+
   .title {
-    color: #9B785C;
+    color: #9b785c;
     font-size: 0.85rem;
     letter-spacing: 3px;
     margin-bottom: 40px;
-    font-family: 'Crimson Text', serif;
+    font-family: "Crimson Text", serif;
     text-align: center;
   }
-  
+
   .gallery_grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -122,16 +150,17 @@ const INITIAL_DISPLAY_COUNT = 9;
     width: 100%;
     padding: 0;
   }
-  
+
   .gallery_item {
     overflow: hidden;
     display: block;
+    position: relative;
   }
 
   .gallery_item.hidden {
     display: none;
   }
-  
+
   .gallery_item img {
     width: 100%;
     height: auto;
@@ -140,7 +169,7 @@ const INITIAL_DISPLAY_COUNT = 9;
     aspect-ratio: 1 / 1;
     transition: transform 0.3s ease;
   }
-  
+
   .gallery_item:hover img {
     transform: scale(1.05);
   }
@@ -152,8 +181,8 @@ const INITIAL_DISPLAY_COUNT = 9;
   }
 
   .show-more-btn {
-    background: #FAFAFA;
-    border: 1px solid #E0E0E0;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
     color: #333;
     padding: 10px 40px;
     font-size: 0.9rem;
@@ -161,11 +190,11 @@ const INITIAL_DISPLAY_COUNT = 9;
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: "Noto Sans KR", sans-serif;
     transition: all 0.2s ease;
   }
 
   .show-more-btn:hover {
-    background: #F0F0F0;
+    background: #f0f0f0;
   }
 </style>
