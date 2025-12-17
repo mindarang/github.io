@@ -9,14 +9,26 @@ importers:
   .:
     dependencies:
       '@astrojs/react':
-        specifier: ^4.4.2
+        specifier: ^4.2.3
         version: 4.4.2(@types/node@24.10.2)(@types/react-dom@19.2.3(@types/react@19.2.7))(@types/react@19.2.7)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       astro:
-        specifier: ^5.16.4
+        specifier: ^5.6.0
         version: 5.16.4(@types/node@24.10.2)(rollup@4.53.3)(typescript@5.9.3)
       photoswipe:
         specifier: ^5.4.4
         version: 5.4.4
+      react:
+        specifier: ^19.1.0
+        version: 19.2.3
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.2.3(react@19.2.3)
+      sharp:
+        specifier: ^0.34.0
+        version: 0.34.5
+      swiper:
+        specifier: ^11.2.6
+        version: 11.2.10
 
 packages:
 
@@ -1439,6 +1451,10 @@ packages:
     engines: {node: '>=16'}
     hasBin: true
 
+  swiper@11.2.10:
+    resolution: {integrity: sha512-RMeVUUjTQH+6N3ckimK93oxz6Sn5la4aDlgPzB+rBrG/smPdCTicXyhxa+woIpopz+jewEloiEE3lKo1h9w2YQ==}
+    engines: {node: '>= 4.7.0'}
+
   tiny-inflate@1.0.3:
     resolution: {integrity: sha512-pkY1fj1cKHb2seWDy0B16HeWyczlJA9/WW3u3c4z/NiWDsO3DOU5D7nhTLE9CF0yXv/QZFY7sEJmj24dK+Rrqw==}
 
@@ -1978,8 +1994,7 @@ snapshots:
   '@esbuild/win32-x64@0.25.12':
     optional: true
 
-  '@img/colour@1.0.0':
-    optional: true
+  '@img/colour@1.0.0': {}
 
   '@img/sharp-darwin-arm64@0.34.5':
     optionalDependencies:
@@ -2526,8 +2541,7 @@ snapshots:
 
   destr@2.0.5: {}
 
-  detect-libc@2.1.2:
-    optional: true
+  detect-libc@2.1.2: {}
 
   deterministic-object-hash@2.0.2:
     dependencies:
@@ -3399,7 +3413,6 @@ snapshots:
       '@img/sharp-win32-arm64': 0.34.5
       '@img/sharp-win32-ia32': 0.34.5
       '@img/sharp-win32-x64': 0.34.5
-    optional: true
 
   shiki@3.19.0:
     dependencies:
@@ -3454,6 +3467,8 @@ snapshots:
       csso: 5.0.5
       picocolors: 1.1.1
       sax: 1.4.3
+
+  swiper@11.2.10: {}
 
   tiny-inflate@1.0.3: {}
 
