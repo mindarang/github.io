@@ -1,7 +1,8 @@
 ---
-import { Image } from 'astro:assets';
-import mapImage from '../assets/map.jpg';
+import { Image } from "astro:assets";
+import mapImage from "../assets/map.jpg";
 ---
+
 <section class="location">
   <div class="title">LOCATION</div>
   <div class="map-container">
@@ -12,7 +13,20 @@ import mapImage from '../assets/map.jpg';
     <div class="address-row">
       <p class="address">인천 연수구 갯벌로 12</p>
       <button id="copy-btn" class="copy-btn" aria-label="주소 복사">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path
+            d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+          ></path></svg
+        >
         복사
       </button>
     </div>
@@ -82,7 +96,9 @@ import mapImage from '../assets/map.jpg';
       <div class="content">
         <ul class="car-info">
           <li>주차장 : 500대 100% 수용 가능한 주차시설 완비</li>
-          <li>도로명 : 인천 연수구 갯벌로 12 다르미앙 (미추홀타워 본관 21층)</li>
+          <li>
+            도로명 : 인천 연수구 갯벌로 12 다르미앙 (미추홀타워 본관 21층)
+          </li>
           <li>지 번 : 송도동 7-50</li>
         </ul>
       </div>
@@ -91,11 +107,29 @@ import mapImage from '../assets/map.jpg';
 </section>
 
 <script>
-  const copyBtn = document.getElementById('copy-btn');
+  function showToast(message: string) {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.textContent = message;
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("show");
+    }, 10);
+
+    setTimeout(() => {
+      toast.classList.remove("show");
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, 2000);
+  }
+
+  const copyBtn = document.getElementById("copy-btn");
   if (copyBtn) {
-    copyBtn.addEventListener('click', () => {
-      navigator.clipboard.writeText('인천 연수구 갯벌로 12').then(() => {
-        alert('주소가 복사되었습니다.');
+    copyBtn.addEventListener("click", () => {
+      navigator.clipboard.writeText("인천 연수구 갯벌로 12").then(() => {
+        showToast("주소가 복사되었습니다.");
       });
     });
   }
@@ -107,34 +141,34 @@ import mapImage from '../assets/map.jpg';
     text-align: center;
     background: #fff;
   }
-  
+
   .title {
-    color: #9B785C;
+    color: #9b785c;
     font-size: 0.85rem;
     letter-spacing: 3px;
     margin-bottom: 40px;
-    font-family: 'Crimson Text', serif;
+    font-family: "Crimson Text", serif;
   }
-  
+
   .map-container {
     margin-bottom: 30px;
     padding: 0 20px;
   }
-  
+
   .map-container img {
     width: 100%;
     height: auto;
     display: block;
     border-radius: 4px;
   }
-  
+
   .info {
     padding: 0 20px;
     margin-bottom: 30px;
   }
-  
+
   .info h3 {
-    font-family: 'Nanum Myeongjo', serif;
+    font-family: "Nanum Myeongjo", serif;
     font-size: 1.15rem; /* Reduced from 1.3rem */
     font-weight: 600;
     margin-bottom: 10px;
@@ -148,15 +182,15 @@ import mapImage from '../assets/map.jpg';
     gap: 8px;
     margin-bottom: 6px;
   }
-  
+
   .info p {
-    font-family: 'Nanum Myeongjo', serif;
+    font-family: "Nanum Myeongjo", serif;
     color: #666;
     font-size: 0.9rem; /* Reduced from 0.95rem */
     margin-bottom: 0;
     line-height: 1.6;
   }
-  
+
   .address {
     color: #333;
     font-weight: 500;
@@ -179,7 +213,7 @@ import mapImage from '../assets/map.jpg';
   .copy-btn:hover {
     background: #e0e0e0;
   }
-  
+
   .map-buttons {
     display: flex;
     gap: 10px;
@@ -187,7 +221,7 @@ import mapImage from '../assets/map.jpg';
     padding: 0 20px;
     margin-bottom: 50px;
   }
-  
+
   .map-btn {
     flex: 1;
     max-width: 120px;
@@ -203,11 +237,11 @@ import mapImage from '../assets/map.jpg';
     justify-content: center;
     align-items: center;
   }
-  
+
   .map-btn:hover {
     background: #f5f5f5;
-    border-color: #9B785C;
-    color: #9B785C;
+    border-color: #9b785c;
+    color: #9b785c;
   }
 
   /* Transport Details Styles */
@@ -221,7 +255,7 @@ import mapImage from '../assets/map.jpg';
   .transport-item {
     margin-bottom: 30px; /* Reduced space */
   }
-  
+
   .transport-item:last-child {
     margin-bottom: 0;
   }
@@ -243,15 +277,15 @@ import mapImage from '../assets/map.jpg';
     border-radius: 50%;
     font-size: 1.1rem;
   }
-  
+
   .transport-details h3 {
     color: #333;
     font-size: 1rem; /* Reduced from 1.1rem */
     font-weight: 700;
     margin: 0;
-    font-family: 'Nanum Myeongjo', serif;
+    font-family: "Nanum Myeongjo", serif;
   }
-  
+
   .subway-info {
     display: flex;
     align-items: center;
@@ -273,7 +307,7 @@ import mapImage from '../assets/map.jpg';
     grid-template-columns: 1fr 1fr;
     gap: 10px 15px;
   }
-  
+
   @media (max-width: 480px) {
     .bus-grid {
       grid-template-columns: 1fr;
@@ -298,8 +332,8 @@ import mapImage from '../assets/map.jpg';
   }
 
   .badge.line-1 {
-    color: #0052A4;
-    border-color: #0052A4;
+    color: #0052a4;
+    border-color: #0052a4;
     background: #fff;
   }
 
