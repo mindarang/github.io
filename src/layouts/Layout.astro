@@ -50,6 +50,8 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "/o
 		--text-sub: #666666;
 		--bg-color: #ffffff;
 		--accent-color: #9B785C;
+		--section-padding-y: 40px;
+		--section-padding-x: 20px;
 	}
 	html {
 		font-family: 'Noto Sans KR', sans-serif;
@@ -90,7 +92,7 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "/o
 		display: block;
 	}
 	.wrapper section {
-		padding: 60px 20px;
+		padding: var(--section-padding-y) var(--section-padding-x);
 		text-align: center;
 	}
 	.serif {
