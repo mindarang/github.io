@@ -6,7 +6,7 @@ interface Props {
     image?: string;
 }
 
-const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "/og-image.jpeg" } = Astro.props;
+const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "https://mindarang.github.io/og-image.jpeg" } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,10 +21,10 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "/o
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={Astro.url} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:image" content={image} />
+		<meta property="og:url" content="https://mindarang.github.io" />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
