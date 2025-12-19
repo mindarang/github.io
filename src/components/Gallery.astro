@@ -1,14 +1,16 @@
 ---
 import { Image, getImage } from "astro:assets";
 
+const INITIAL_DISPLAY_COUNT = 9;
+
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/gallery/*"
 );
-const imagePaths = Object.keys(images).filter((imagePath) => {
-  return imagePath.startsWith(`/src/assets/gallery/`);
-});
-
-const INITIAL_DISPLAY_COUNT = 9;
+const imagePaths = Object.keys(images)
+  .filter((imagePath) => {
+    return imagePath.startsWith(`/src/assets/gallery/`);
+  })
+  .slice(0, INITIAL_DISPLAY_COUNT);
 ---
 
 <section class="gallery_container">
@@ -18,66 +20,33 @@ const INITIAL_DISPLAY_COUNT = 9;
       imagePaths.map(async (imagePath, index) => {
         const imageMod = await images[imagePath]();
         const image = imageMod.default;
-        const optimizedImage = await getImage({
+        const optimizedFull = await getImage({
           src: image,
+          width: 1200,
+          quality: 80,
+          format: "webp",
         });
         return (
           <a
-            href={optimizedImage.src}
-            data-pswp-width={optimizedImage.attributes.width}
-            data-pswp-height={optimizedImage.attributes.height}
-            class={`gallery_item ${index >= INITIAL_DISPLAY_COUNT ? "hidden" : ""}`}
+            href={optimizedFull.src}
+            data-pswp-width={optimizedFull.attributes.width}
+            data-pswp-height={optimizedFull.attributes.height}
+            class="gallery_item"
             target="_blank"
           >
-            <Image src={image} alt={`Gallery ${index + 1}`} />
+            <Image
+              src={image}
+              alt={`Gallery ${index + 1}`}
+              width={400}
+              height={400}
+              format="webp"
+              quality={70}
+            />
           </a>
         );
       })
     }
   </div>
-
-  {
-    imagePaths.length > INITIAL_DISPLAY_COUNT && (
-      <div class="more-btn-container">
-        <button id="show-more-btn" class="show-more-btn">
-          더보기
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 10L12 15L17 10"
-              stroke="#9B785C"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-        <button id="collapse-btn" class="show-more-btn" style="display: none;">
-          접기
-          <svg
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7 15L12 10L17 15"
-              stroke="#9B785C"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-        </button>
-      </div>
-    )
-  }
 </section>
 
 <script>
@@ -92,47 +61,14 @@ const INITIAL_DISPLAY_COUNT = 9;
     lightbox.init();
   }
 
-  // Toggle Functionality
-  function initGallery() {
-    const showMoreBtn = document.getElementById("show-more-btn");
-    const collapseBtn = document.getElementById("collapse-btn");
-    const galleryGrid = document.getElementById("gallery-grid");
-
-    if (showMoreBtn && collapseBtn && galleryGrid) {
-      const items = galleryGrid.querySelectorAll(".gallery_item");
-      const INITIAL_COUNT = 9;
-
-      showMoreBtn.addEventListener("click", () => {
-        items.forEach((item) => item.classList.remove("hidden"));
-        showMoreBtn.style.display = "none";
-        collapseBtn.style.display = "flex";
-      });
-
-      collapseBtn.addEventListener("click", () => {
-        items.forEach((item, index) => {
-          if (index >= INITIAL_COUNT) {
-            item.classList.add("hidden");
-          }
-        });
-        collapseBtn.style.display = "none";
-        showMoreBtn.style.display = "flex";
-
-        const galleryTop = galleryGrid.offsetTop;
-        window.scrollTo({ top: galleryTop - 100, behavior: "smooth" });
-      });
-    }
-  }
-
   // Initialize on load and on view transitions if used
   document.addEventListener("DOMContentLoaded", () => {
     initPhotoSwipe();
-    initGallery();
   });
 
   // For Astro View Transitions compatibility
   document.addEventListener("astro:page-load", () => {
     initPhotoSwipe();
-    initGallery();
   });
 </script>
 
@@ -165,10 +101,6 @@ const INITIAL_DISPLAY_COUNT = 9;
     position: relative;
   }
 
-  .gallery_item.hidden {
-    display: none;
-  }
-
   .gallery_item img {
     width: 100%;
     height: auto;
@@ -180,29 +112,5 @@ const INITIAL_DISPLAY_COUNT = 9;
 
   .gallery_item:hover img {
     transform: scale(1.05);
-  }
-
-  .more-btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-  }
-
-  .show-more-btn {
-    background: #fafafa;
-    border: 1px solid #e0e0e0;
-    color: #333;
-    padding: 10px 40px;
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-family: "Noto Sans KR", sans-serif;
-    transition: all 0.2s ease;
-  }
-
-  .show-more-btn:hover {
-    background: #f0f0f0;
   }
 </style>

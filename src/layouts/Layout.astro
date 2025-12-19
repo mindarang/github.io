@@ -100,38 +100,42 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "/o
 	}
 
   /* Animation Styles */
-  .wrapper section {
+  .fade_in {
     opacity: 0;
     transform: translateY(30px);
     transition: all 1s ease-out;
   }
 
-  section.is-visible {
+  .fade_in.visible {
     opacity: 1;
     transform: translateY(0);
   }
 </style>
 
 <script>
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px',
-    threshold: 0.1
-  };
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
+  const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target); // Run animation only once
+        entry.target.classList.add("visible");
       }
     });
-  }, observerOptions);
+  };
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const sections = document.querySelectorAll('.wrapper section');
-    sections.forEach(section => {
-      observer.observe(section);
-    });
+  const observer = new IntersectionObserver(handleIntersection, {
+    threshold: 0.4,
+    rootMargin: "50px",
   });
+
+  function initAnimations() {
+    const contentElement = document.querySelector(".content");
+    if (contentElement) {
+      Array.from(contentElement.children).forEach((element) => {
+        element.classList.add("fade_in");
+        observer.observe(element);
+      });
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', initAnimations);
+  document.addEventListener('astro:page-load', initAnimations);
 </script>
