@@ -8,7 +8,10 @@
         c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
       </svg>
     </div>
-    <p class="loading-text">저희의 시작을 함께해 주세요!</p>
+    <div class="text-container">
+      <p id="loading-text" class="loading-text">초대장을 불러오고 있습니다...</p>
+      <button id="entry-button" class="entry-btn">초대장 열기</button>
+    </div>
   </div>
 </div>
 
@@ -50,6 +53,15 @@
     filter: drop-shadow(0 0 8px rgba(155, 120, 92, 0.3));
   }
 
+  .text-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    height: 80px; /* Fixed height to prevent jump */
+    justify-content: center;
+  }
+
   .loading-text {
     font-family: 'MapoFlowerIsland', 'Noto Sans KR', sans-serif;
     color: #9B785C;
@@ -58,6 +70,33 @@
     margin: 0;
     opacity: 0;
     animation: fadeIn 1s ease-out forwards 0.2s;
+  }
+
+  .entry-btn {
+    opacity: 0;
+    visibility: hidden;
+    background: transparent;
+    border: 1px solid #9B785C;
+    color: #9B785C;
+    padding: 0.8rem 2.5rem;
+    font-family: 'MapoFlowerIsland', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(10px);
+    border-radius: 2px;
+  }
+
+  .entry-btn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .entry-btn:hover {
+    background: #9B785C;
+    color: #ffffff;
   }
 
   @keyframes pulse {
@@ -76,45 +115,54 @@
   function initLoading() {
     const overlay = document.getElementById('loading-overlay');
     const body = document.body;
+    const loadingText = document.getElementById('loading-text');
+    const entryButton = document.getElementById('entry-button');
     
-    if (!overlay) return;
+    if (!overlay || !entryButton || !loadingText) return;
+
+    function showButton() {
+      loadingText!.style.display = 'none';
+      entryButton!.classList.add('visible');
+    }
 
     function hideLoading() {
       overlay?.classList.add('hidden');
       body.style.overflow = '';
       
-      // Secondary cleanup to ensure overlay is gone from DOM flow
       setTimeout(() => {
         if (overlay) overlay.style.display = 'none';
       }, 800);
     }
 
-    // Use FontFaceSet API if available
+    // Listen for button click to hide loading
+    entryButton.addEventListener('click', hideLoading);
+
+    // Initial check and minimum display time
+    const minLoadingTime = 1200;
+    const startTime = Date.now();
+
+    const handleLoadComplete = () => {
+      const elapsedTime = Date.now() - startTime;
+      const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+      
+      setTimeout(showButton, remainingTime);
+    };
+
     if ('fonts' in document) {
-      document.fonts.ready.then(() => {
-        // Minimum display time for the beautiful loading screen
-        const minLoadingTime = 1200;
-        const startTime = Date.now();
-        
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
-        
-        setTimeout(hideLoading, remainingTime);
-      }).catch((err) => {
+      document.fonts.ready.then(handleLoadComplete).catch((err) => {
         console.error('Font loading failed:', err);
-        hideLoading();
+        handleLoadComplete();
       });
     } else {
-      window.addEventListener('load', hideLoading);
+      window.addEventListener('load', handleLoadComplete);
     }
 
-    // Safety timeout
-    setTimeout(hideLoading, 4000);
+    // Safety timeout to show button
+    setTimeout(showButton, 4000);
   }
 
-  // Initialize on regular load
+  // Initialize
   initLoading();
 
-  // Handle Astro page transitions if they are enabled later
   document.addEventListener('astro:after-swap', initLoading);
 </script>

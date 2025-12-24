@@ -2,6 +2,7 @@
 import "photoswipe/style.css";
 import Dandelions from "../components/Dandelions.astro";
 import Loading from "../components/Loading.astro";
+import MusicPlayer from "../components/MusicPlayer.astro";
 interface Props {
 	title: string;
     description?: string;
@@ -42,6 +43,7 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "ht
 	</head>
 	<body style="overflow: hidden;">
 		<Loading />
+		<MusicPlayer />
 		<div class="wrapper">
 			<slot />
 		</div>

@@ -1,0 +1,180 @@
+---
+---
+<div class="music-player">
+  <button id="music-toggle" class="music-btn" aria-label="Toggle Music">
+    <div class="icon-container">
+      <svg class="music-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13"></path>
+        <circle cx="6" cy="18" r="3"></circle>
+        <circle cx="18" cy="16" r="3"></circle>
+      </svg>
+      <div class="mute-line"></div>
+    </div>
+  </button>
+  <audio id="bg-music" loop preload="auto">
+    <source src="/background.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</div>
+
+<style>
+  .music-player {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+  }
+
+  .music-btn {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(155, 120, 92, 0.15);
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #9B785C;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  .music-btn:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.1) translateY(-2px);
+    box-shadow: 0 6px 20px rgba(155, 120, 92, 0.15);
+  }
+
+  .music-btn::before {
+    content: 'BGM';
+    position: absolute;
+    right: 48px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    font-family: 'MapoFlowerIsland', sans-serif;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+    color: #9B785C;
+  }
+
+  .music-btn:hover::before {
+    opacity: 0.7;
+  }
+
+  .icon-container {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .music-icon {
+    width: 100%;
+    height: 100%;
+  }
+
+  .mute-line {
+    position: absolute;
+    width: 0%;
+    height: 2px;
+    background: #9B785C;
+    transform: rotate(45deg);
+    transition: width 0.3s ease;
+    border-radius: 1px;
+  }
+
+  .music-btn.muted .mute-line {
+    width: 130%;
+  }
+
+  .music-btn.playing .music-icon {
+    animation: bounce 1.2s infinite ease-in-out;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+  }
+
+  /* Responsive adjustment for mobile */
+  @media (max-width: 480px) {
+    .music-player {
+      top: 15px;
+      right: 15px;
+    }
+    .music-btn {
+      width: 32px;
+      height: 32px;
+    }
+    .icon-container {
+      width: 16px;
+      height: 16px;
+    }
+  }
+</style>
+
+<script>
+  function initMusic() {
+    const audio = document.getElementById('bg-music') as HTMLAudioElement;
+    const btn = document.getElementById('music-toggle');
+    if (!audio || !btn) return;
+
+    const toggleMusic = () => {
+      if (audio.paused) {
+        audio.play().catch(e => console.log('Playback failed:', e));
+        btn.classList.add('playing');
+        btn.classList.remove('muted');
+        audio.muted = false;
+      } else {
+        audio.pause();
+        btn.classList.remove('playing');
+        btn.classList.add('muted');
+        audio.muted = true;
+      }
+    };
+
+    btn.addEventListener('click', toggleMusic);
+
+    // Try to autoplay as soon as possible
+    const startPlayback = () => {
+      audio.play()
+        .then(() => {
+          btn.classList.add('playing');
+          btn.classList.remove('muted');
+          // Success! Remove all temporary listeners
+          ['click', 'touchstart', 'scroll', 'mousedown'].forEach(type => {
+            document.removeEventListener(type, startPlayback);
+          });
+        })
+        .catch(error => {
+          // Keep waiting for interaction
+          console.log('Playback blocked, waiting for gesture...');
+        });
+    };
+
+    // 1. Initial attempt
+    startPlayback();
+
+    // 2. Add multiple interaction listeners to catch first gesture
+    ['click', 'touchstart', 'scroll', 'mousedown'].forEach(type => {
+      document.addEventListener(type, startPlayback, { once: true });
+    });
+  }
+
+  // Early initialization
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMusic);
+  } else {
+    initMusic();
+  }
+
+  // Astro page transitions support
+  document.addEventListener('astro:after-swap', initMusic);
+</script>
