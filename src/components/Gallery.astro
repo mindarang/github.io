@@ -1,8 +1,6 @@
 ---
 import { Image, getImage } from "astro:assets";
 
-const INITIAL_DISPLAY_COUNT = 9;
-
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/gallery/*"
 );
@@ -10,7 +8,16 @@ const imagePaths = Object.keys(images)
   .filter((imagePath) => {
     return imagePath.startsWith(`/src/assets/gallery/`);
   })
-  .slice(0, INITIAL_DISPLAY_COUNT);
+  .sort((a, b) => {
+    const aName = a.split("/").at(-1)?.split(".")[0];
+    const bName = b.split("/").at(-1)?.split(".")[0];
+
+    if (!aName || !bName) {
+      return 0;
+    }
+
+    return parseFloat(aName) - parseFloat(bName);
+  });
 ---
 
 <section class="gallery_container">
