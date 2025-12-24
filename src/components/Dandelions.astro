@@ -5,7 +5,6 @@
 <div id="dandelion-canvas" class="dandelion-container" aria-hidden="true"></div>
 
 <script>
-  const SEED_COUNT = 20;
   const flowerSVG = `
         <svg viewBox="0 0 100 100" style="width: 1em; height: 1em; display: block; filter: drop-shadow(0 0 4px rgba(120, 90, 70, 0.25));">
             <g transform="translate(50,50)">
@@ -83,8 +82,8 @@
     if (container) container.innerHTML = "";
 
     // Use a jittered grid for uniform distribution
-    const rows = 4;
-    const cols = 5;
+    const rows = 3;
+    const cols = 3;
     const cellWidth = 100 / cols;
     const cellHeight = 100 / rows;
 
