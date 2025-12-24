@@ -1,0 +1,152 @@
+---
+
+---
+
+<div id="dandelion-canvas" class="dandelion-container" aria-hidden="true"></div>
+
+<script>
+  const SEED_COUNT = 20;
+  const flowerSVG = `
+        <svg viewBox="0 0 100 100" style="width: 1em; height: 1em; display: block; filter: drop-shadow(0 0 4px rgba(120, 90, 70, 0.25));">
+            <g transform="translate(50,50)">
+                ${Array.from({ length: 10 })
+                  .map(
+                    (_, i) => `
+                    <path 
+                        d="M-8,0 C-8,-25 -4,-35 0,-35 C4,-35 8,-25 8,0 Z" 
+                        fill="none" 
+                        stroke="#d3cdc4"
+                        stroke-width="1.5"
+                        transform="rotate(${i * 36})"
+                    />
+                `
+                  )
+                  .join("")}
+                ${Array.from({ length: 10 })
+                  .map(
+                    (_, i) => `
+                    <path 
+                        d="M-8,0 C-8,-25 -4,-35 0,-35 C4,-35 8,-25 8,0 Z" 
+                        fill="#ffffff" 
+                        transform="rotate(${i * 36})"
+                    />
+                `
+                  )
+                  .join("")}
+            </g>
+            <circle cx="50" cy="50" r="10" fill="#FFB700" />
+            <circle cx="50" cy="50" r="12" fill="none" stroke="#FF8F00" stroke-width="1.5" opacity="0.4" />
+        </svg>
+    `;
+
+  function createBreezySeed(left: number, top: number) {
+    const container = document.getElementById("dandelion-canvas");
+    if (!container) return;
+
+    const seed = document.createElement("div");
+    seed.className = "seed-breezy";
+
+    // Inner wrapper for double animation (drift + wobble)
+    seed.innerHTML = `<div class="seed-wobble">${flowerSVG}</div>`;
+
+    // Initial position (using passed coordinates)
+    seed.style.left = left + "%";
+    seed.style.top = top + "%";
+
+    // Size
+    const size = 18 + Math.random() * 15;
+    seed.style.fontSize = size + "px";
+
+    // Main Animation: Drift
+    const duration = 20 + Math.random() * 20;
+    seed.style.animationDuration = duration + "s";
+    seed.style.animationDelay = -(Math.random() * duration) + "s";
+
+    // Wobble Animation Configuration
+    const wobble = seed.querySelector(".seed-wobble");
+    if (wobble instanceof HTMLElement) {
+      wobble.style.animationDuration = 4 + Math.random() * 4 + "s";
+      wobble.style.animationDelay = -(Math.random() * 5) + "s";
+    }
+
+    // Custom path variables - move in different subtle directions to maintain spread
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 100 + Math.random() * 100;
+    seed.style.setProperty("--x-drift", Math.cos(angle) * distance + "px");
+    seed.style.setProperty("--y-drift", Math.sin(angle) * distance + "px");
+
+    container.appendChild(seed);
+  }
+
+  function initDandelions() {
+    const container = document.getElementById("dandelion-canvas");
+    if (container) container.innerHTML = "";
+
+    // Use a jittered grid for uniform distribution
+    const rows = 4;
+    const cols = 5;
+    const cellWidth = 100 / cols;
+    const cellHeight = 100 / rows;
+
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const left = c * cellWidth + Math.random() * cellWidth * 0.8;
+        const top = r * cellHeight + Math.random() * cellHeight * 0.8;
+        createBreezySeed(left, top);
+      }
+    }
+  }
+
+  initDandelions();
+  document.addEventListener("astro:page-load", initDandelions);
+</script>
+
+<style is:global>
+  .dandelion-container {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 9999;
+    overflow: hidden;
+  }
+
+  .seed-breezy {
+    position: absolute;
+    opacity: 0;
+    animation: breezePath infinite ease-in-out;
+    will-change: transform, opacity;
+  }
+
+  .seed-wobble {
+    animation: breezeWobble infinite ease-in-out;
+  }
+
+  @keyframes breezePath {
+    0% {
+      transform: translate(0, 0);
+      opacity: 0;
+    }
+    15% {
+      opacity: 0.8;
+    }
+    85% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translate(var(--x-drift), var(--y-drift));
+      opacity: 0;
+    }
+  }
+
+  @keyframes breezeWobble {
+    0%,
+    100% {
+      transform: rotate(-15deg) translateY(0);
+    }
+    50% {
+      transform: rotate(15deg) translateY(-15px);
+    }
+  }
+</style>

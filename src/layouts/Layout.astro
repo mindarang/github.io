@@ -1,5 +1,7 @@
 ---
 import "photoswipe/style.css";
+import Dandelions from "../components/Dandelions.astro";
+import Loading from "../components/Loading.astro";
 interface Props {
 	title: string;
     description?: string;
@@ -38,13 +40,21 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "ht
 		<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&display=swap" rel="stylesheet">
 		<link href="https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 	</head>
-	<body>
+	<body style="overflow: hidden;">
+		<Loading />
 		<div class="wrapper">
 			<slot />
 		</div>
+		<Dandelions />
 	</body>
 </html>
 <style is:global>
+	@font-face {
+		font-family: 'MapoFlowerIsland';
+		src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/MapoFlowerIslandA.woff') format('woff');
+		font-weight: normal;
+		font-display: swap;
+	}
 	:root {
 		--text-main: #333333;
 		--text-sub: #666666;
@@ -54,7 +64,7 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "ht
 		--section-padding-x: 20px;
 	}
 	html {
-		font-family: 'Noto Sans KR', sans-serif;
+		font-family: 'MapoFlowerIsland', 'Noto Sans KR', sans-serif;
 		background: #f5f0eb;
 		color: var(--text-main);
 	}
@@ -97,6 +107,9 @@ const { title, description = "2026년 3월 8일 일요일 AM 11시", image = "ht
 	}
 	.serif {
 		font-family: 'Crimson Text', serif;
+	}
+	.font-flower {
+		font-family: 'MapoFlowerIsland', sans-serif;
 	}
 
   /* Animation Styles */

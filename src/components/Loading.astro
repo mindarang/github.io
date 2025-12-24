@@ -1,0 +1,120 @@
+---
+---
+<div id="loading-overlay">
+  <div class="loader-content">
+    <div class="heart-container">
+      <svg class="heart" viewBox="0 0 32 29.6">
+        <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+        c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"/>
+      </svg>
+    </div>
+    <p class="loading-text">저희의 시작을 함께해 주세요!</p>
+  </div>
+</div>
+
+<style>
+  #loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
+  }
+
+  #loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .heart-container {
+    width: 60px;
+    height: 60px;
+  }
+
+  .heart {
+    fill: #9B785C;
+    animation: pulse 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 8px rgba(155, 120, 92, 0.3));
+  }
+
+  .loading-text {
+    font-family: 'MapoFlowerIsland', 'Noto Sans KR', sans-serif;
+    color: #9B785C;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    margin: 0;
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards 0.2s;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(0.95); opacity: 0.8; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  function initLoading() {
+    const overlay = document.getElementById('loading-overlay');
+    const body = document.body;
+    
+    if (!overlay) return;
+
+    function hideLoading() {
+      overlay?.classList.add('hidden');
+      body.style.overflow = '';
+      
+      // Secondary cleanup to ensure overlay is gone from DOM flow
+      setTimeout(() => {
+        if (overlay) overlay.style.display = 'none';
+      }, 800);
+    }
+
+    // Use FontFaceSet API if available
+    if ('fonts' in document) {
+      document.fonts.ready.then(() => {
+        // Minimum display time for the beautiful loading screen
+        const minLoadingTime = 1200;
+        const startTime = Date.now();
+        
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, minLoadingTime - elapsedTime);
+        
+        setTimeout(hideLoading, remainingTime);
+      }).catch((err) => {
+        console.error('Font loading failed:', err);
+        hideLoading();
+      });
+    } else {
+      window.addEventListener('load', hideLoading);
+    }
+
+    // Safety timeout
+    setTimeout(hideLoading, 4000);
+  }
+
+  // Initialize on regular load
+  initLoading();
+
+  // Handle Astro page transitions if they are enabled later
+  document.addEventListener('astro:after-swap', initLoading);
+</script>
